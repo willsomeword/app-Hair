@@ -6,7 +6,7 @@ export default class User{
     static findUserById() {
       throw new Error('Method not implemented.');
     }
-    async findUserById(){
+    async findUserById(userId){
         const userRepo = new UserRepo(); // Instantiate UserRepo
        const gettingUserById = userRepo.findUserById(userId);
         return gettingUserById;

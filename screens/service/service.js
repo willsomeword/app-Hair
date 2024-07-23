@@ -82,22 +82,42 @@ export default function Service({ route, navigation }) {
     const initAtendimento = async () => {
         const serviceDTO = {
             ...currService,
-            status:1,
+            status: 1,
         };
 
         const updatedStatus = await
-         servicoService.updateServico
-         (serviceDTO._id,serviceDTO);
+            servicoService.updateServico
+                (serviceDTO._id, serviceDTO);
 
-         if(updatedStatus){
+        if (updatedStatus) {
             const updatingState = {
                 ...currService,
-                status:updatedStatus.status,
+                status: updatedStatus.status,
             };
             setCurrService(updatingState);
             alert("Atendimento Iniciado")
-         }
+        }
     };
+
+    const finalizarAtendimento = async () => {
+        const serviceDTO = {
+            ...currService,
+            status: 2,
+        };
+
+        const updatedStatus = await
+            servicoService.updateServico
+                (serviceDTO._id, serviceDTO);
+
+        if (updatedStatus) {
+            const updatingState = {
+                ...currService,
+                status: updatedStatus.status,
+            };
+            setCurrService(updatingState);
+            alert("Atendimento Finalizado")
+        }
+    }
 
     const updatingObservacao = () => {
         if (isUpdatingObs) {
@@ -114,29 +134,29 @@ export default function Service({ route, navigation }) {
     }, [currService]);
     console.log(currService);
 
-  
+
     useEffect(() => {
         switch (currService?.status) {
-          case 0: //agendado
-            //Baby Blue
-            setColorCorrect("#89CFF0");
-            break;
-          case 1: //em atendimento
-            // green
-            setColorCorrect("#43c101");
-            break;
-          case 2: //finalizado
-            // green
-            setColorCorrect("#5F8575");
-            break;
-          case 3: //cancelado
-            // vermelho
-            setColorCorrect("#FF5733");
-            break;
-          default:
-            setColorCorrect("#89CFF0");
+            case 0: //agendado
+                //Baby Blue
+                setColorCorrect("#89CFF0");
+                break;
+            case 1: //em atendimento
+                // green
+                setColorCorrect("#43c101");
+                break;
+            case 2: //finalizado
+                // green
+                setColorCorrect("#5F8575");
+                break;
+            case 3: //cancelado
+                // vermelho
+                setColorCorrect("#FF5733");
+                break;
+            default:
+                setColorCorrect("#89CFF0");
         }
-      }, [currService?.status]);
+    }, [currService?.status]);
 
 
 
@@ -198,7 +218,9 @@ export default function Service({ route, navigation }) {
                             <TouchableOpacity
                                 style={styles.buton}
                                 activeOpacity={0.8}
-                                onPress={(ev) => navigation.navigate("service")}
+                                onPress={(ev) => navigation.navigate("ServiceDetails",{
+                                    currService: currService,
+                                })}
                             >
                                 <MaterialIcons
                                     name="arrow-forward-ios"
@@ -209,16 +231,29 @@ export default function Service({ route, navigation }) {
                         </View>
                     </View>
                     <View>
-                        <Button
-                            width={200}
-                            height={40}
-                            bgColor={"#081225"}
-                            color={"white"}
-                            action={initAtendimento}
-                            label={"Iniciar Atendimento"}
-
-                        />
-
+                        {currService?.status == 1 ? (
+                            <>
+                                <Button
+                                    width={200}
+                                    height={40}
+                                    bgColor={"#081225"}
+                                    color={"white"}
+                                    action={finalizarAtendimento}
+                                    label={"Finalizar atendimento"}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    width={200}
+                                    height={40}
+                                    bgColor={"#081225"}
+                                    color={"white"}
+                                    action={initAtendimento}
+                                    label={"Iniciar Atendimento"}
+                                />
+                            </>
+                        )}
                     </View>
                     <View>
 
@@ -228,9 +263,9 @@ export default function Service({ route, navigation }) {
                         <Animation statusCode={currService?.status}>
                             <View style={{
                                 ...styles.circle,
-                                backgroundColor:colorCorrect
+                                backgroundColor: colorCorrect
 
-                                }} />
+                            }} />
                         </Animation>
 
                     </View>

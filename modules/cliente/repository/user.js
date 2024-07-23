@@ -1,8 +1,11 @@
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default class UserRepoCliente {
-    
+    constructor() {
+        this.API_URL = process.env.EXPO_PUBLIC_API_URL;
+    }
+
     async findUserById(userId) {
-        const token = sessionStorage.getItem("token");
+        const token = await AsyncStorage.getItem("token");
 
         if (!token) return;
         console.log(userId);
@@ -12,7 +15,7 @@ export default class UserRepoCliente {
         });
 
 
-        const options= {
+        const options = {
             method: "GET",
             headers: header,
             mode: "cors",
@@ -20,7 +23,7 @@ export default class UserRepoCliente {
         };
 
         const response = await fetch(
-            `http://localhost:3002/cliente/${userId}`,
+            `${process.env.EXPO_PUBLIC_API_URL}/cliente/${userId}`,
             options
         );
 
@@ -30,32 +33,32 @@ export default class UserRepoCliente {
             return undefined;
         }
     }
-    async findAll(){
-        const token = sessionStorage.getItem("token");
+    async findAll() {
+        const token = await AsyncStorage.getItem("token");
 
-        if (!token)return;
+        if (!token) return;
 
         const header = new Headers({
             "content-Type": "application/json",
             authorization: token,
         });
 
-        const options ={
-            method:"GET",
-            headers:header,
-            mode:"cors",
+        const options = {
+            method: "GET",
+            headers: header,
+            mode: "cors",
         };
 
-        const response = await fetch("http://localhost:3002/cliente", options)
-  
-        if(response.ok){
-            return(await response.json());
-        }else {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/cliente`, options)
+
+        if (response.ok) {
+            return (await response.json());
+        } else {
             return undefined;
         }
     }
     async createCliente(data) {
-        const token = sessionStorage.getItem("token");
+        const token = await AsyncStorage.getItem("token");
 
 
         if (!token) return;
@@ -75,13 +78,13 @@ export default class UserRepoCliente {
 
 
         const response = await fetch(
-            `http://localhost:3002/cliente`,
+            `${process.env.EXPO_PUBLIC_API_URL}/cliente`,
 
             options
         );
 
         if (response.ok) {
-            return (await response.json()) ;
+            return (await response.json());
 
         } else {
             return undefined;
@@ -89,7 +92,7 @@ export default class UserRepoCliente {
     }
 
     async UpdateCliente(data, idcliente) {
-        const token = sessionStorage.getItem("token");
+        const token = await AsyncStorage.getItem("token");
 
 
         if (!token) return;
@@ -109,7 +112,7 @@ export default class UserRepoCliente {
 
 
         const response = await fetch(
-            `http://localhost:3002/cliente/${idcliente}`,
+            `${process.env.EXPO_PUBLIC_API_URL}/cliente/${userId}`,
 
             options
         );
